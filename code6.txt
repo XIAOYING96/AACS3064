@@ -1,0 +1,46 @@
+.model small
+.stack
+.data
+      msgRequest    db  "Enter your Payment: $"
+      msgOutput     db  0dh, 0ah,"The second character is: $"
+      msg           db  0dh, 0ah,"You Paid:  $"
+
+      Para_List   LABEL BYTE
+      MaxLen      db  20
+      ActLen      db  ?
+      InputData   db  20 Dup("$")
+
+.code
+ main proc
+      mov ax, @data
+      mov ds, ax
+
+      mov ah, 09h
+      lea dx, msgRequest  
+      int 21h
+
+      mov ah, 0Ah
+      lea dx, Para_List
+	int 21h
+      
+      mov ah,09h
+      lea dx,msgOutput
+      int 21h
+
+      mov ah, 02h
+      mov dl,InputData[1]
+      int 21h
+
+      mov ah,09h
+      lea dx,msg
+      int 21h
+
+      mov ah, 09h
+      lea dx,InputData
+      int 21h
+
+ exit:
+      mov ah, 4ch
+      int 21h
+main endp
+      end main

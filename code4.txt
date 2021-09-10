@@ -1,0 +1,75 @@
+.model samll
+.stack
+.data
+
+msgM		DB	"------------- MENU-----------", 0ah, 0dh, "Press 2 for Feedback HIstory", 0ah, 0dh, "Press 1 to Enter Feedback", 0ah, 0dh, "Press 0 to EXIT", 0ah, 0dh, "$"
+msg0		DB	0ah, 0dh, "0-You Chose to EXIT. BYE BYE! $"
+msg1		DB	0ah, 0dh, "1-Please Enter Your Comments : $"
+msg2		DB	0ah, 0dh, "2-Previous Feedback History:  $"
+count		DB	0
+sANS		DB 0ah, 0dh, "Enter Choice => $"
+feedback1	DB 50 DUP (" "), 0dh, 0ah,"$"
+
+.code
+main proc
+	mov ax, @data
+	mov ds, ax
+
+;--- MAIN MENU
+menu:	mov ah, 09h
+		lea dx, msgM
+		int 21h
+
+		;--prompt
+		mov ah, 09h
+		lea dx, sAns
+		int 21h
+
+		;--GET USER INPUT
+		mov ah, 01h
+		int 21h
+
+		CMP AL, "2"
+		JE history
+		CMP AL, "1"
+		JE feedback
+		CMP AL, "0"
+		JE exit
+
+feedback:
+		mov ah, 09h
+		lea dx, msg1
+		int 21h
+
+		;-- get STRING INPUT from keyboard
+		mov ah, 3Fh				; read an array of bytes from keyboard-0		
+		mov bx, 0				; bx = 0 (select keyboard)
+		mov cx, 50				; cx = 127 (maximum bytes to read)
+		lea dx, feedback1		; stored in DS:DX
+		int 21h		
+
+		inc count
+
+		JMP menu
+
+history:
+		mov ah, 09h
+		lea dx, msg2
+		int 21h
+
+		mov ah, 09h
+		lea dx, feedback1
+		int 21h
+
+		JMP menu
+
+EXIT:
+		mov ah, 09h
+		lea dx, msg0
+		int 21h
+
+		mov ah, 4ch
+		int 21h
+
+main endp
+end main

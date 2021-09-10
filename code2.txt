@@ -1,0 +1,97 @@
+TITLE 	Calculate Average = in1 + in2/ 2 = (1 decimal point)
+
+
+.model small
+.stack 100
+.data
+	msg1			DB	"Enter TWO odd integer values (0 to 9): $"
+	msg2			DB	0dh, 0ah, "The Average of input values is : $"
+	input1			DB	0
+	input2			DB	0
+	Quotient		DB	?
+	Remainder		DB	?
+	decimal1		DB	?
+	TWO				DB	2
+	TEN				DB  10
+
+.code
+	main proc
+		mov ax, @data
+		mov ds, ax
+
+		;------ Display prompt msg1
+		mov ah, 09h
+		lea dx, msg1
+		int 21h
+		
+		;----- Get user input 1 & 2, auto print comma
+		mov ah, 01h
+		int 21h
+		  sub al, 30h			; convert input1 from ascii to number
+		mov input1, al			; store input 1 value
+		
+		mov ah, 02h
+		mov dl, ","
+		int 21h
+
+		mov ah, 01h
+		int 21h
+		  sub al, 30h			; convert input2 from ascii to number
+		mov input2, al			; store input 2 value		
+
+		;---- Display output msg2
+		mov ah, 09h
+		lea dx, msg2
+		int 21h
+	
+		;---- Calculate Average
+		mov ax, 0		; reset ax
+		mov al, input1
+		add al, input2
+		div TWO
+		mov Quotient, al
+		mov Remainder, ah		
+
+		;---- Ensure 1 decimal x10	
+		mov al, Remainder
+		mul TEN
+		div TWO
+		mov decimal1, al		;Get 1 decimal point	
+	
+		;---- Display Output Result
+		;---- Display AL= Quotient = integer
+		mov ah, 02h
+		mov dl, Quotient
+			add dl, 30h
+		int 21h
+
+		mov ah, 02h
+		mov dl, "."
+		int 21h
+
+		;---- Display decimal1 = 1st decimal
+		mov ah, 02h
+		mov dl, decimal1
+			add dl, 30h
+		int 21h
+
+		;---- Terminate
+		mov ah, 4ch
+		int 21h
+	main endp
+	end main
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	

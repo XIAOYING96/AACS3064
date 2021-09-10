@@ -1,0 +1,50 @@
+.model small
+.stack
+.data
+    msg0 DB 0dh, 0ah, "Type 0 to exit & 1 to continue ==>  $"
+	msg1 DB 0dh, 0ah, "This is a call-subroutine test. $"
+	msg2 DB 0dh, 0ah, "I am NOW INSIDE this function called TESTING. $"
+	msg3 DB 0dh, 0ah, "Now I am back outside- I have returned to the line after CALL TEST.$"
+
+.code
+main proc
+	mov ax, @data
+	mov ds, ax
+
+	mov ah, 09h
+	lea dx, msg1
+	int 21h
+
+continue:
+	CALL testing	; subroutine aka function call
+	mov ah, 09h
+	lea dx, msg3
+	int 21h
+	
+	mov ah, 09h
+	lea dx, msg0
+	int 21h
+
+	mov ah, 01h
+	int 21h
+	sub AL, 30h ; change user input from ASCII to numbers
+
+	CMP AL, 0	; compare AL= user input with 0
+	JE exit     ; IF AL = 0 then jump to exit
+	CMP AL, 1   ; compare AL= user input with 1
+	JE continue  ; ELSE IF AL = 1 then jump to testing
+	JNE exit    ; default case exit
+
+testing:
+	mov ah, 09h
+	lea dx, msg2
+	int 21h
+	RET			; RETurn to & continue to the calling function
+
+exit: 	mov ah, 4ch
+	    int 21h
+main endp
+end main
+
+
+
