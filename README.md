@@ -13,3 +13,14 @@ Please reference you tutor or lecturer.
 Please don't copy the code here into your assignment or test. 
 
                                                                           ---Chris
+ +---------------------------------------+                                 
+ | I/O, MOVE TO AH & FOLLOWEB BY INT 21H | 
+ +---------------------------------------+
+ |   01 H --> INPUT BYTE                 |
+ |   02 H --> OUTPUT BYTE                |
+ |   07 H --> INPUT BYTE(PASSWORD)       |
+ |   09 H --> OUTPUT STRING              |
+ |   0A H --> INPUT STRING               |
+ |   4C H --> TERMINATE PROGRAM          |
+ +---------------------------------------+
+
